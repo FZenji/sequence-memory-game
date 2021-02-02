@@ -7,16 +7,18 @@ GREY = (50, 50, 50)
 
 
 def draw(width=3, height=None):
-    box_size = 20
-    boarder = 0
-    gap = 5
-
     if height is None:
         height = width
+
+    box_size = 75
+    gap = 10
+    boarder_x = (screen.get_width() - (width * (box_size + gap) - gap))/2
+    boarder_y = (screen.get_height() - (height * (box_size + gap) - gap))/2
+
     for i in range(width):
         for j in range(height):
-            pygame.draw.rect(screen, GREY, (boarder + (box_size + gap)*i,
-                                            boarder + (box_size + gap)*j,
+            pygame.draw.rect(screen, GREY, (boarder_x + (box_size + gap)*i,
+                                            boarder_y + (box_size + gap)*j,
                                             box_size, box_size))
 
 
