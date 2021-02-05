@@ -15,7 +15,7 @@ def board_create(width=3, height=None):
 
     board = [pygame.Rect(boarder_x + (box_size + gap) * i,
                          boarder_y + (box_size + gap) * j,
-                         box_size, box_size) for i in range(width) for j in range(height)]
+                         box_size, box_size) for i in range(height) for j in range(width)]
 
     sprite2num = {tuple(s): n for n, s in enumerate(board)}
     num2sprite = {n: s for n, s in enumerate(board)}
@@ -31,13 +31,20 @@ def draw(clicked):
 
 
 def show_pattern():
-    pattern.append(random.randint(0, 8))
+    new = True
+    while new:
+        pattern.append(random.randint(0, 8))
+        try:
+            if pattern[-1] != pattern[-2]:
+                new = False
+        except IndexError:
+            pass
     for i in pattern:
         draw([])
-        pygame.draw.rect(screen, GREY, sprites[i])
+        pygame.draw.rect(screen, (255, 0, 0), sprites[i])
         pygame.display.flip()
         time.sleep(0.5)
-    print(pattern)
+    #print(pattern)
 
 
 screen = pygame.display.set_mode((640, 480))  # Start the screen
@@ -50,6 +57,7 @@ clicked_sprites = []
 clicked_order = []
 pattern = []
 round_done = True
+round_counter = 0
 
 running = True
 while running:
@@ -63,7 +71,7 @@ while running:
 
     # Logic goes here
     draw(clicked_sprites)
-    print(clicked_order)
+    #print(clicked_order)
     if round_done:
         show_pattern()
         clicked_sprites = []
@@ -72,7 +80,17 @@ while running:
 
     if clicked_order == pattern[:len(clicked_order)+1]:
         time.sleep(0.5)
+        round_counter += 1
         round_done = True
+
+    if clicked_order != pattern[:len(clicked_order)]:
+        running = False
+
+    if len(clicked_order) >= len(pattern):
+        clicked_order = clicked_order[:len(clicked_order)]
     pygame.display.flip()
 
+print(round_counter)
+print(clicked_order)
+print(pattern)
 pygame.quit()  # Close the window
